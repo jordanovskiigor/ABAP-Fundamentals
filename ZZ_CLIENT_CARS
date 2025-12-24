@@ -1,0 +1,71 @@
+*&---------------------------------------------------------------------*
+*& Report zz_2007_cars
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_2007_cars.
+
+
+TYPES: BEGIN OF ty_car,
+    manufacturer(20) TYPE C,
+    model(20) TYPE C,
+    year(4) TYPE N,
+    chassisnumber(10) TYPE N,
+    power(3) TYPE N,
+    transmission(10) TYPE C,
+END OF ty_car.
+
+DATA mycar TYPE ty_car.
+
+mycar-manufacturer = 'Volkswagen'.
+mycar-model = 'Taigo'.
+mycar-year = 2023.
+mycar-chassisnumber = 2633212345.
+mycar-power = 116.
+mycar-transmission = 'manual'.
+
+DATA itab TYPE STANDARD TABLE OF ty_car
+WITH KEY chassisnumber.
+
+INSERT mycar INTO TABLE itab.
+
+mycar-manufacturer = 'Audi'.
+mycar-model = 'A4'.
+mycar-year = 2023.
+mycar-chassisnumber = 2101569334.
+mycar-power = 150.
+mycar-transmission = 'automatic'.
+
+INSERT mycar INTO TABLE itab.
+
+itab = VALUE #( BASE itab
+  ( manufacturer = 'BMW'
+    model = 'X1'
+    year = 2021
+    chassisnumber = 987654321
+    power = 130
+    transmission = 'automatic')
+
+
+ ( manufacturer  = 'Mercedes-Benz'
+    model         = 'C 200 d'
+    year          = 2025
+    chassisnumber = 8821769044
+    power         = 163
+    transmission  = 'automatic' )
+).
+
+
+LOOP AT itab INTO mycar.
+
+
+  WRITE: / 'Manufacturer:',   mycar-manufacturer,
+           / 'Model:',          mycar-model,
+           / 'Year:',           mycar-year,
+           / 'Chassis Number:', mycar-chassisnumber,
+           / 'Power:',    mycar-power, 'HP',
+           / 'Transmission:',   mycar-transmission.
+
+  WRITE /.
+
+ENDLOOP.

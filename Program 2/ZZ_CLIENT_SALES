@@ -1,0 +1,55 @@
+&---------------------------------------------------------------------*
+*& Report zz_2007_sales
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zz_2007_sales.
+
+TYPES: BEGIN OF ty_employee,
+       name TYPE string,
+       base_salary TYPE P LENGTH 5 DECIMALS 2,
+       sales TYPE P LENGTH 5 DECIMALS 2,
+       percentage TYPE I,
+ END OF ty_employee.
+
+DATA my_employee TYPE ty_employee.
+
+DATA it_employee TYPE TABLE OF ty_employee.
+
+my_employee-name = 'John Doe'.
+my_employee-base_salary = 1000.
+my_employee-sales = 5000.
+my_employee-percentage = 10.
+
+APPEND my_employee TO it_employee.
+
+it_employee = VALUE #(
+   BASE it_employee
+ ( name = 'Max Mustermann'
+   base_salary = 1500
+   sales = 2200
+   percentage = 15
+ )
+
+ ( name = 'Mark Andrews'
+   base_salary = 1500
+   sales = 3400
+   percentage = 22
+ )
+
+).
+
+LOOP AT it_employee INTO my_employee.
+PERFORM output USING my_employee.
+ENDLOOP.
+
+FORM output USING u_employee TYPE ty_employee.
+DATA total_salary TYPE P LENGTH 5 DECIMALS 2.
+total_salary = u_employee-base_salary + ( u_employee-sales * u_employee-percentage / 100 ).
+WRITE: / 'Name: ', u_employee-name.
+WRITE: / 'Base Salary: ', u_employee-base_salary.
+WRITE: / 'Sales: ', u_employee-sales.
+WRITE: / 'Percentage: ', u_employee-percentage.
+WRITE: / 'Total Salary: ', total_salary.
+WRITE /.
+ENDFORM.
